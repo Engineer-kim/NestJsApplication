@@ -18,6 +18,7 @@ export class UsersController {
   @UseInterceptors(SerializeInterceptor)
   @Get('/:id') 
   async findUser(@Param('id') id: string){
+    //user 가 클래스의 인스턴스임 이거를 직렬화 시키는거
     const user = await this.usersService.findOne(parseInt(id)) ///URl 은 모든게 다 String 이기때문에 int로 변환이 안됨
     if(!user){
       throw new NotFoundException('user not found')

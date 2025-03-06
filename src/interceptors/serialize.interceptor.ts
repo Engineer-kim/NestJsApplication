@@ -2,13 +2,18 @@ import { UseInterceptors , NestInterceptor , ExecutionContext, CallHandler } fro
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators"
 import { plainToClass } from "class-transformer";
+import { UserDto } from "../users/dtos/user.dto";
 
 export class SerializeInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
-        console.log('I am running before the handler', context)
+        //console.log('I am running before the handler', context)
         return next.handle().pipe(
             map((data: any) => {
-                return plainToClass(data, {excludeExtraneousValues: true})
+                return plainToClass(
+                    UserDto, 
+                    data, 
+                    {excludeExtraneousValues: true} // excludeExtraneousValues: true 옵션을 사용하면, 클래스에 정의되지 않은 속성은 변환된 클래스 인스턴스에서 제외
+                )
             })
     )}
 }
