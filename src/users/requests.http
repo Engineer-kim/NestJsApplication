@@ -15,3 +15,17 @@ GET http://localhost:3000/auth/1
 
 ### Find a All User
 GET http://localhost:3000/auth?email=asdf@asdf.com
+
+
+### Delete particular User
+DELETE http://localhost:3000/auth/1
+
+
+### Update User
+UPDATE http://localhost:3000/auth/1
+
+content-type: application/json
+
+{
+  "email": "aaaaa@aaaa.com"
+}
