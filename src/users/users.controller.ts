@@ -1,7 +1,9 @@
-import { Body, Controller, Param, Post, Get, Query, Delete, Patch} from '@nestjs/common';
+import { Body, Controller, Param, Post, Get, Query, Delete, Patch, NotFoundException, UseInterceptors, ClassSerializerInterceptor} from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
+
+
 
 @Controller('auth')
 export class UsersController {
@@ -13,9 +15,14 @@ export class UsersController {
     this.usersService.create(body.email, body.password);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('/:id') 
-  findUser(@Param('id') id: string){
-    this.usersService.findOne(parseInt(id)) ///URl 은 모든게 다 String 이기때문에 int로 변환이 안됨
+  async findUser(@Param('id') id: string){
+    const user = await this.usersService.findOne(parseInt(id)) ///URl 은 모든게 다 String 이기때문에 int로 변환이 안됨
+    if(!user){
+      throw new NotFoundException('user not found')
+    }
+    return user
   }
 
 
