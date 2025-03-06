@@ -6,3 +6,12 @@ content-type: application/json
   "email": "asdf@asdf.com",
   "password": "asdlfkajsd"
 }
+
+
+
+### Find a particular User with a given ID
+GET http://localhost:3000/auth/1
+
+
+### Find a All User
+GET http://localhost:3000/auth?email=asdf@asdf.com
