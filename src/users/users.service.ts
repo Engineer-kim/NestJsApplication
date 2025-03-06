@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,7 +26,7 @@ export class UsersService {
   async update(id: number , updateInfo: Partial<User>){
       const user = await this.findOne(id)
       if(!user){
-        throw new Error("User Data is not Found")
+        throw new NotFoundException("User Data is not Found")
       }
       //user에 updateInfo 값을 덮어 씌우고 user 의 값이 반환된다
       Object.assign(user, updateInfo) //원본(기존) 객체를 변경함
@@ -36,7 +36,7 @@ export class UsersService {
   async remove(id: number){ //Number 넘기면  객체이므로 산술 연산을 직접 수행하면 암묵적인 변환 발생 가능 => 프리미티브 타입넘길떄는 항상 조심
     const deleteUser = await this.findOne(id)
     if(!deleteUser){
-      throw new Error("User Data is not Found")
+      throw new NotFoundException("User Data is not Found")
     }
     //delete 는 엔티티 삭제(=> DB에서 즉시 삭제) , 반환값 없음
     //remove 는 삭제된 엔티티 인스턴스를 반환 

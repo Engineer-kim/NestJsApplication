@@ -2,7 +2,7 @@ import { Body, Controller, Param, Post, Get, Query, Delete, Patch, NotFoundExcep
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
-
+import { SerializeInterceptor } from '../interceptors/serialize.interceptor';
 
 
 @Controller('auth')
@@ -15,7 +15,7 @@ export class UsersController {
     this.usersService.create(body.email, body.password);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @UseInterceptors(SerializeInterceptor)
   @Get('/:id') 
   async findUser(@Param('id') id: string){
     const user = await this.usersService.findOne(parseInt(id)) ///URl 은 모든게 다 String 이기때문에 int로 변환이 안됨
