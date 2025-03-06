@@ -1,11 +1,12 @@
-import { Body, Controller, Param, Post, Get, Query, Delete, Patch, NotFoundException, UseInterceptors, ClassSerializerInterceptor} from '@nestjs/common';
+import { Body, Controller, Param, Post, Get, Query, Delete, Patch, NotFoundException} from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
-import { SerializeInterceptor } from '../interceptors/serialize.interceptor';
-
+import { Serialize } from '../interceptors/serialize.interceptor';
+import { UserDto } from './dtos/user.dto'; 
 
 @Controller('auth')
+@Serialize(UserDto)
 export class UsersController {
 
   constructor(private usersService: UsersService) {}
@@ -15,7 +16,7 @@ export class UsersController {
     this.usersService.create(body.email, body.password);
   }
 
-  @UseInterceptors(SerializeInterceptor)
+  // @UseInterceptors(new SerializSeInterceptor(UserDto)) 바로 아래의 @Serilze 코드와 동일함
   @Get('/:id') 
   async findUser(@Param('id') id: string){
     //user 가 클래스의 인스턴스임 이거를 직렬화 시키는거
