@@ -3,7 +3,9 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators"
 import { plainToClass } from "class-transformer";
 
-interface ClassConstructor { //클래스로만 타입 제한
+interface ClassConstructor {
+// new 연산자로 호출할 수 있는 타입"만 허용합니다. 즉, 인스턴스를 생성할 수 있는 타입
+//  결론은 DTO 클래스만  혹은 생성자만 가능 , Strinng, Number, Boolean, Array, Object는 불가능
     new (...args: any[]): {}
 }
 
