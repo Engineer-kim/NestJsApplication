@@ -1,13 +1,17 @@
-import { Body, Controller, Param, Post, Get, Query, Delete, Patch, NotFoundException , Session} from '@nestjs/common';
+import { Body, Controller, Param, Post, Get, Query, Delete, Patch, NotFoundException , Session , UseInterceptors} from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto'; 
 import { AuthService } from './auth.service';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { User } from './user.entity';
 
 @Controller('auth')
 @Serialize(UserDto)
+@UseInterceptors(CurrentUserInterceptor)
 export class UsersController {
 
   constructor(private usersService: UsersService, 
@@ -24,9 +28,14 @@ export class UsersController {
   //   return `<div style="color:${session.color}">Hello World</div>`
   // }
 
+  // @Get('/distinguish')
+  // distinguishUser(@Session() session: any){
+  //   return this.usersService.findOne(session.userId)
+  // }
+
   @Get('/distinguish')
-  distinguishUser(@Session() session: any){
-    return this.usersService.findOne(session.userId)
+  distinguishUser(@CurrentUser() user: User){
+    return user
   }
 
   @Post('/signout')
@@ -37,6 +46,7 @@ export class UsersController {
 
   @Post('/signup')
   async createUser(@Body() body: CreateUserDto , @Session() session: any) {
+    //여기서 굳이 세션이 필요할까? 로그인이 아니라 회원가인데...
     const user = await this.authService.signup(body.email, body.password)
     session.userId = user.id //세션이 userId 라는 키로 벨류인 user.id 를 저장
     return user
