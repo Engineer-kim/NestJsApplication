@@ -18,6 +18,12 @@ export class UsersController {
     this.authService.signup(body.email, body.password)
   }
 
+  @Post('/signin')
+  login(@Body() body: CreateUserDto) {
+    this.authService.signin(body.email, body.password)
+  }
+
+
   // @UseInterceptors(new SerializSeInterceptor(UserDto)) 바로 아래의 @Serilze 코드와 동일함
   @Get('/:id') 
   async findUser(@Param('id') id: string){
