@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Get, Query, Delete, Patch, NotFoundException} from '@nestjs/common';
+import { Body, Controller, Param, Post, Get, Query, Delete, Patch, NotFoundException , Session} from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
@@ -13,14 +13,40 @@ export class UsersController {
   constructor(private usersService: UsersService, 
     private authService: AuthService ) {}
 
+  // @Get('/colors/:color')
+  // setColors(@Param('color') color: string, @Session() session: any){
+  //   session.color = color
+  //   return `<div style="color:${color}">Hello World</div>`
+  // }
+
+  // @Get('/colors')
+  // getColors(@Session() session: any){
+  //   return `<div style="color:${session.color}">Hello World</div>`
+  // }
+
+  @Get('/distinguish')
+  distinguishUser(@Session() session: any){
+    return this.usersService.findOne(session.userId)
+  }
+
+  @Post('/signout')
+  signout(@Session() session: any){
+    session.userId = null
+    //return 'you are signed out'
+  }
+
   @Post('/signup')
-  createUser(@Body() body: CreateUserDto) {
-    this.authService.signup(body.email, body.password)
+  async createUser(@Body() body: CreateUserDto , @Session() session: any) {
+    const user = await this.authService.signup(body.email, body.password)
+    session.userId = user.id //세션이 userId 라는 키로 벨류인 user.id 를 저장
+    return user
   }
 
   @Post('/signin')
-  login(@Body() body: CreateUserDto) {
-    this.authService.signin(body.email, body.password)
+  async login(@Body() body: CreateUserDto , @Session() session: any) {
+    const user = await this.authService.signin(body.email, body.password)
+    session.userId = user.id
+    return user
   }
 
 
