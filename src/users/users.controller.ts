@@ -53,7 +53,7 @@ export class UsersController {
   }
 
   @Post('/signin')
-  async login(@Body() body: CreateUserDto , @Session() session: any) {
+  async signin(@Body() body: CreateUserDto , @Session() session: any) {
     const user = await this.authService.signin(body.email, body.password)
     session.userId = user.id
     return user
