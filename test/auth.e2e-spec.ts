@@ -22,7 +22,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('handles a  signup request', () => {
-    const email = 'asdlkjq@akl.com'
+    const email = 'asdf@asdf.com'
 
     return request(app.getHttpServer())
       .post('/auth/signup')
@@ -34,5 +34,23 @@ describe('AppController (e2e)', () => {
         expect(email).toEqual(email)
         expect(res.body.accessToken).toBeDefined(); //undefined가 아닌지 확인
       });
+  });
+
+  it('signup as a new user then get the currently logged in user', async () => {
+    const email = 'asdf@asdf.com';
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({ email, password: 'asdf' })
+      .expect(201);
+
+    let cookie =  res.get('Set-Cookie') as string[];
+
+    const { body } = await request(app.getHttpServer())
+      .get('/auth/whoami')
+      .set("Cookie" , cookie)
+      .expect(200);
+
+    expect(body.email).toEqual(email);
   });
 });
