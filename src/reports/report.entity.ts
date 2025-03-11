@@ -1,5 +1,7 @@
 import { ColdObservable } from 'rxjs/internal/testing/ColdObservable';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn , ManyToOne } from 'typeorm';
+import { User } from '../users/user.entity'
+
 
 @Entity()
 export class Report {
@@ -31,4 +33,9 @@ export class Report {
   @Column()
   //마일리지
   mileage: number
+
+  //@ManyToOne(관계 맺고 있는 대상의 엔티티 ,  어떤 엔티티와 관계를 맺고 있는지(=반대 방향의 관계))
+  @ManyToOne(() => User , (user) => user.reports)//user.reports ==> 사용자가 작성한 리포트
+  //유저 입장에서는 1대 다
+  user: User
 }
