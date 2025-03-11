@@ -16,6 +16,8 @@ export class User {
   @Exclude()
   password: string;
 
+  //() => Report 함수로 감싸는 이유 => Report 와 User 클래스 두 파일이 실행되고 난후 
+  //해당 OneToMany 데코레이터가 실행되야 되기 때문
   @OneToMany(() => Report , (report) => report.user)
   reports: Report[]
 
