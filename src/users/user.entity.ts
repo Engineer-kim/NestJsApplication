@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, 
-  AfterInsert, AfterUpdate, AfterRemove , OneToMany
+  AfterInsert, AfterUpdate, AfterRemove , OneToMany,
+  Collection
  } from 'typeorm';
 import { Report } from 'src/reports/report.entity';
 
@@ -15,6 +16,9 @@ export class User {
   @Column()
   @Exclude()
   password: string;
+
+  @Column({default : true})
+  admin: boolean
 
   //() => Report 함수로 감싸는 이유 => Report 와 User 클래스 두 파일이 실행되고 난후 
   //해당 OneToMany 데코레이터가 실행되야 되기 때문
