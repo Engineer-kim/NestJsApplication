@@ -49,11 +49,12 @@ const cookieSession = require('cookie-session'); //미들웨어 가져옴
   ],
 })
 export class AppModule {
+  constructor(private configService: ConfigService) {} //ConfigService => 환경변수를 가져오는 서비스
   //configure ==> 미들웨어 구성함수 (app.use 랑 비슷한 역할)
   configure(consumer: MiddlewareConsumer) { //MiddlewareConsumer =>  미들웨어를 등록하고 관리하는 헬퍼 클래스
     consumer.apply(
       cookieSession({
-        keys: ['asdfasdf']
+        keys: [this.configService.get('COOKIE_KEY')], //환경변수에서 쿠키 키를 가져옴
       }),
     )
     .forRoutes('*'); //모든 라우터에 대해서 쿠키 세션의 키값을 asdfasdf로 설정
