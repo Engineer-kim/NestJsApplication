@@ -19,23 +19,18 @@ const cookieSession = require('cookie-session'); //미들웨어 가져옴
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    TypeOrmModule.forRootAsync({  //환경 변수 기반의 동적 설정
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => { //useFactory 동적으로 프로바이더(Spring에서의 서비스) 생성가능
-        return {
-          type: 'sqlite',
-          database: config.get('DB_NAME'),
-          entities: [User, Report], //자바의 그 엔티티 맞음 (DB 테이블과 매핑되는 클래스)
-          synchronize: true,
-        }
-      },
-    }),
-    // TypeOrmModule.forRoot({
-    // type: 'sqlite',
-    // database: 'db.sqlite',
-    // entities: [User , Report],
-    // synchronize: true,
-    //}),
+    // TypeOrmModule.forRootAsync({  //환경 변수 기반의 동적 설정
+    //   inject: [ConfigService],
+    //   useFactory: (config: ConfigService) => { //useFactory 동적으로 프로바이더(Spring에서의 서비스) 생성가능
+    //     return {
+    //       type: 'sqlite',
+    //       database: config.get('DB_NAME'),
+    //       entities: [User, Report], //자바의 그 엔티티 맞음 (DB 테이블과 매핑되는 클래스)
+    //       synchronize: true,  // 상용에서 True로 하면 안댐 큰일남
+    //     }
+    //   },
+    // }),
+  TypeOrmModule.forRoot(),
   UsersModule, ReportsModule],
   controllers: [AppController],
   providers: [
