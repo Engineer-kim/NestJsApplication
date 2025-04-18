@@ -32,6 +32,17 @@
 $ npm install
 ```
 
+## 마이그레이션 절차
+
+```bash
+# 1. 엔티티 변경
+# 2. 마이그레이션 생성
+$ npm run migration:generate
+
+# 3. 마이그레이션 실행
+$ npm run migration:run
+```
+
 ## Compile and run the project
 
 ```bash

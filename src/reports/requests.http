@@ -3,7 +3,7 @@ content-type: application/json
 
 {
     "make": "Hyndai",
-    "model" :: "N79",
+    "model" : "N79",
     "year": 1980,
     "mileage": 100000,
     "lng": 0,
